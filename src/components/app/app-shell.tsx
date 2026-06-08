@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, BookOpenCheck, LayoutDashboard, LineChart, Search, Settings, Users } from "lucide-react";
+import { Bell, BookOpenCheck, LayoutDashboard, LineChart, LogOut, Search, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { seedData } from "@/lib/seed-data";
 import { visibleNavigation } from "@/lib/permissions";
+import { createClient } from "@/lib/supabase/client";
 import { cn, initials } from "@/lib/utils";
 
 const iconMap = {
@@ -27,9 +28,25 @@ const hrefMap = {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const currentUser = seedData.users[0];
+  const currentUser = seedData.users[0] ?? {
+    id: "current-user",
+    name: "Admin",
+    email: "",
+    role: "Super Admin" as const,
+    team_name: "Leadership",
+    invitation_status: "Active" as const,
+    invited_at: null,
+    joined_at: null,
+    created_at: new Date().toISOString()
+  };
   const unread = seedData.notifications.filter((item) => !item.read_at).length;
   const nav = visibleNavigation(currentUser.role);
+
+  async function signOut() {
+    const supabase = createClient();
+    await supabase?.auth.signOut();
+    window.location.href = "/login";
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -86,6 +103,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <div className="text-[11px] text-muted-foreground">{currentUser.role}</div>
             </div>
           </div>
+          <Button aria-label="Sign out" onClick={signOut} size="icon" variant="ghost">
+            <LogOut className="h-4 w-4" />
+          </Button>
         </header>
         <nav className="sticky top-16 z-10 flex gap-1 overflow-x-auto border-b bg-white px-3 py-2 lg:hidden">
           {nav.map((item) => {

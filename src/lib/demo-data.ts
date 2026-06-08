@@ -20,7 +20,7 @@ export function normalizeDemoData(value: unknown): AppData {
 }
 
 export function readDemoData() {
-  const saved = window.localStorage.getItem("cpos-demo-data");
+  const saved = window.localStorage.getItem("npcp-production-data-v1");
   if (!saved) return seedData;
   try {
     return normalizeDemoData(JSON.parse(saved));

@@ -43,7 +43,7 @@ export function ReportsClient() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("cpos-demo-data", JSON.stringify(data));
+    window.localStorage.setItem("npcp-production-data-v1", JSON.stringify(data));
   }, [data]);
 
   const reportCustomFields = data.customFields.filter((field) => field.scope === "reports");
