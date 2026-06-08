@@ -2,10 +2,13 @@ import { AppShell } from "@/components/app/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/app/page-header";
+import { requireUser } from "@/lib/auth/require-user";
 
 const roadmap = ["Leave Management", "Attendance", "Performance Reviews", "Payroll Tracking", "Capacity Planning", "AI Productivity Insights"];
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  await requireUser();
+
   return (
     <AppShell>
       <PageHeader title="Settings" description="Operational setup for storage, notifications, Supabase, and future modules." />
