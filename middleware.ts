@@ -11,9 +11,19 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const response = NextResponse.next({ request });
+  const pathname = request.nextUrl.pathname;
+  const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/auth");
 
-  if (!url || !key || process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+  if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
     return response;
+  }
+
+  if (!url || !key) {
+    if (isAuthRoute) return response;
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/login";
+    redirectUrl.searchParams.set("message", "Supabase is not configured yet.");
+    return NextResponse.redirect(redirectUrl);
   }
 
   const supabase = createServerClient(url, key, {
@@ -32,7 +42,7 @@ export async function middleware(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user && !request.nextUrl.pathname.startsWith("/login")) {
+  if (!user && !isAuthRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
     return NextResponse.redirect(redirectUrl);
