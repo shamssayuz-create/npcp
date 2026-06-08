@@ -62,7 +62,7 @@ export function LoginClient() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/profile`
         }
       });
       setMessage(error ? error.message : "Check your email for a sign-in link.");

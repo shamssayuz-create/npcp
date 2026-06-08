@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, BookOpenCheck, LayoutDashboard, LineChart, LogOut, Search, Settings, Users } from "lucide-react";
+import { Bell, BookOpenCheck, LayoutDashboard, LineChart, LogOut, Search, Settings, UserCircle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { seedData } from "@/lib/seed-data";
@@ -15,7 +15,8 @@ const iconMap = {
   Courses: BookOpenCheck,
   Reports: LineChart,
   Users,
-  Settings
+  Settings,
+  Profile: UserCircle
 };
 
 const hrefMap = {
@@ -23,7 +24,8 @@ const hrefMap = {
   Courses: "/courses",
   Reports: "/reports",
   Users: "/users",
-  Settings: "/settings"
+  Settings: "/settings",
+  Profile: "/profile"
 };
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -40,7 +42,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     created_at: new Date().toISOString()
   };
   const unread = seedData.notifications.filter((item) => !item.read_at).length;
-  const nav = visibleNavigation(currentUser.role);
+  const nav = [...visibleNavigation(currentUser.role), "Profile"];
 
   async function signOut() {
     const supabase = createClient();

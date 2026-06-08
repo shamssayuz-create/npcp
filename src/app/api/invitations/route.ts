@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   }
 
   const { name, email, role, team_name } = parsed.data;
-  const redirectTo = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard` : undefined;
+  const redirectTo = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/profile` : undefined;
   const invited = await supabase.auth.admin.inviteUserByEmail(email, {
     data: { name, role, team_name },
     redirectTo
