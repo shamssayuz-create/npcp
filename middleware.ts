@@ -14,10 +14,6 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/auth");
 
-  if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
-    return response;
-  }
-
   if (!url || !key) {
     if (isAuthRoute) return response;
     const redirectUrl = request.nextUrl.clone();
